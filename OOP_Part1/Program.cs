@@ -416,6 +416,27 @@
             }
         }
         
+        public static void RoomPriceStatistics()
+        {
+            DisplayHeader("Room Price Stataistics");
+
+            int totalRooms = rooms.Count;
+            int availableRooms = rooms.Count(r => r.isAvailable);
+            double averagePrice = rooms.Average(r => r.pricePerNight);
+            double maxPrice = rooms.Max(r => r.pricePerNight);
+            double minPrice = rooms.Min(r => r.pricePerNight);
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"\nTotal Rooms: {totalRooms}" +
+                $"\nAvailable Rooms: {availableRooms}" +
+                $"\nAverage Price: {averagePrice:F2}" +
+                $"\nMaximum Price: {maxPrice:F2}" +
+                $"\nMinimum Price: {minPrice:F2}");
+            Console.ResetColor();
+            Console.ReadLine();
+        }
+
+
         public static void SearchFilterRooms()
         {
             
@@ -445,6 +466,10 @@
 
                         case "3":
                             FilterByMaxPrice();
+                            break;
+
+                        case "4":
+                            RoomPriceStatistics();
                             break;
 
                         case "0":
