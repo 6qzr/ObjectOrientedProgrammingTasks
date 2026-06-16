@@ -89,6 +89,9 @@
                 // Create new Room object and add it to the room list
                 rooms.Add(new Room(roomNumber, roomType, pricePerNight));
 
+                Console.ForegroundColor = ConsoleColor.White;
+                rooms[rooms.Count - 1].DisplayRoom();
+                Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\n  Room {roomNumber} added successfully. Total rooms: {rooms.Count}");
                 Console.ResetColor();
@@ -161,9 +164,11 @@
 
                 guests.Add(newGuest);
 
-                Console.ForegroundColor = ConsoleColor.Green;
+                Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine();
                 newGuest.DisplayGuest();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"\n  Guest registered successfully. Total guests: {guests.Count}");
                 Console.ResetColor();
                 Console.ReadLine();
