@@ -5,6 +5,10 @@
         // System Lists
         static List<Room> rooms = new List<Room>();
         static List<Guest> guests = new List<Guest>();
+        
+        // Guest Counter
+        private static int guestCounter = 0;
+
 
         public static void DisplayHeader(string header)
         {
@@ -102,6 +106,80 @@
             }
         }
 
+        public static void RegisterNewGuest()
+        {
+            try
+            {
+                DisplayHeader("REGISTER NEW GUEST");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter guest name: ");
+                Console.ResetColor();
+
+                string? guestName = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrEmpty(guestName))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid guest name. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter check-in date (yyyy-MM-dd): ");
+                Console.ResetColor();
+
+                if (!DateOnly.TryParse(Console.ReadLine(), out DateOnly checkInDate) || checkInDate < DateOnly.FromDateTime(DateTime.Now))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid check-in date. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter number of nights: ");
+                Console.ResetColor();
+
+                if (!int.TryParse(Console.ReadLine(), out int totalNights) || totalNights <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid number of nights. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                string guestId = "G" + (++guestCounter).ToString("D3");
+
+                string roomNumber = "Not Assigned";
+
+                Guest newGuest = new Guest(guestId, guestName, roomNumber, checkInDate, totalNights);
+
+                guests.Add(newGuest);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine();
+                newGuest.DisplayGuest();
+                Console.WriteLine($"\n  Guest registered successfully. Total guests: {guests.Count}");
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+
         public static void MainMenu()
         {
             while (true)
@@ -132,7 +210,7 @@
                         break;
                         
                     case "2":
-                        // Register New Guest
+                        RegisterNewGuest();
                         break;
 
                     case "3":
