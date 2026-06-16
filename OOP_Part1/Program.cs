@@ -270,6 +270,54 @@
             }
         }
 
+        public static void ShowAvailableRooms()
+        {
+            DisplayHeader("available rooms");
+
+            List<Room> availableRooms = rooms.Where(r => r.isAvailable)
+                                             .OrderBy(r => r.pricePerNight)
+                                             .ToList();
+
+            for (int i = 0; i < availableRooms.Count; i++)
+            {
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write($"\n[{i+1}]"); availableRooms[i].DisplayRoom();
+                Console.ResetColor();
+            }
+            
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"\nTotal available rooms: {availableRooms.Count}");
+            Console.ResetColor();
+            Console.ReadLine();
+        }
+
+        public static void SearchFilterRooms()
+        {
+            DisplayHeader("Search & Filter Rooms");
+
+            // Display sub-menu
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n(1) Show all available rooms\n(2) Filter by room type\n(3) Filter by max price\n(4) Room price statistics\n(0) Back");
+            Console.ResetColor();
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("\nSelect option: ");
+            Console.ResetColor();
+
+            switch (Console.ReadLine()?.Trim())
+            {
+                case "1":
+                    ShowAvailableRooms();
+                    break;
+                
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Invalid option. Press Enter to try again.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    break;
+            }
+        }
+
         public static void MainMenu()
         {
             while (true)
@@ -308,7 +356,7 @@
                         break;
 
                     case "4":
-                        // Search & Filter Rooms
+                        SearchFilterRooms();
                         break;
 
                     case "5":
