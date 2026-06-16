@@ -544,75 +544,88 @@
 
         public static void CheckOutGuest()
         {
-            DisplayHeader("Check Out A Guest");
-
-            string? guestId = GetGuestID();
-            if (guestId == null) return;
-
-            Guest? guest = guests.FirstOrDefault(g => g.guestId == guestId);
-            if (guest == null)
+            try
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n  No guest with such ID. Press Enter.");
-                Console.ResetColor();
-                Console.ReadLine();
-                return;
-            }
+                DisplayHeader("Check Out A Guest");
 
-            if (guest.roomNumber == "Not Assigned")
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n  This guest has no active booking. Press Enter.");
-                Console.ResetColor();
-                Console.ReadLine();
-                return;
-            }
+                string? guestId = GetGuestID();
+                if (guestId == null) return;
 
-            Room? guestRoom = rooms.FirstOrDefault(r => r.roomNumber == guest.roomNumber);
-
-            Console.ForegroundColor = ConsoleColor.Cyan;
-            Console.WriteLine($"\n  ===== FINAL BILL =====");
-            Console.WriteLine($"  Guest Name   : {guest.guestName}");
-            Console.WriteLine($"  Room Number  : {guestRoom.roomNumber}");
-            Console.WriteLine($"  Room Type    : {guestRoom.roomType}");
-            Console.WriteLine($"  Check-In Date: {guest.checkInDate}");
-            Console.WriteLine($"  Total Nights : {guest.totalNights}");
-            Console.WriteLine($"  Price/Night  : {guestRoom.pricePerNight:F2} OMR");
-            Console.WriteLine($"  Total Cost   : {guest.CalculateTotalCost(rooms):F2} OMR");
-            Console.WriteLine($"  ======================");
-            Console.ResetColor();
-
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("\nConfirm Checkout (Y/N): ");
-            Console.ResetColor();
-
-            switch (Console.ReadLine()?.Trim().ToLower())
-            {
-                case "y":
-                    //Continue
-                    break;
-
-                case "n":
-                    return;
-
-                default:
+                Guest? guest = guests.FirstOrDefault(g => g.guestId == guestId);
+                if (guest == null)
+                {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n  Invalid option. Press Enter to try again.");
+                    Console.WriteLine("\n  No guest with such ID. Press Enter.");
                     Console.ResetColor();
                     Console.ReadLine();
                     return;
+                }
+
+                if (guest.roomNumber == "Not Assigned")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  This guest has no active booking. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Room? guestRoom = rooms.FirstOrDefault(r => r.roomNumber == guest.roomNumber);
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine($"\n  ===== FINAL BILL =====");
+                Console.WriteLine($"  Guest Name   : {guest.guestName}");
+                Console.WriteLine($"  Room Number  : {guestRoom.roomNumber}");
+                Console.WriteLine($"  Room Type    : {guestRoom.roomType}");
+                Console.WriteLine($"  Check-In Date: {guest.checkInDate}");
+                Console.WriteLine($"  Total Nights : {guest.totalNights}");
+                Console.WriteLine($"  Price/Night  : {guestRoom.pricePerNight:F2} OMR");
+                Console.WriteLine($"  Total Cost   : {guest.CalculateTotalCost(rooms):F2} OMR");
+                Console.WriteLine($"  ======================");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nConfirm Checkout (Y/N): ");
+                Console.ResetColor();
+
+                switch (Console.ReadLine()?.Trim().ToLower())
+                {
+                    case "y":
+                        //Continue
+                        break;
+
+                    case "n":
+                        return;
+
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n  Invalid option. Press Enter to try again.");
+                        Console.ResetColor();
+                        Console.ReadLine();
+                        return;
+                }
+
+                guestRoom.isAvailable = true;
+                guests.Remove(guest);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  Checkout successful!");
+                Console.WriteLine($"  Total Guests : {guests.Count}");
+                Console.WriteLine($"  Total Rooms  : {rooms.Count}");
+                Console.WriteLine($"  Room {guestRoom.roomNumber} available: {rooms.Any(r => r.roomNumber == guestRoom.roomNumber && r.isAvailable)}");
+                Console.ResetColor();
+                Console.ReadLine();
             }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
 
-            guestRoom.isAvailable = true;
-            guests.Remove(guest);
-
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"\n  Checkout successful!");
-            Console.WriteLine($"  Total Guests : {guests.Count}");
-            Console.WriteLine($"  Total Rooms  : {rooms.Count}");
-            Console.WriteLine($"  Room {guestRoom.roomNumber} available: {rooms.Any(r => r.roomNumber == guestRoom.roomNumber && r.isAvailable)}");
-            Console.ResetColor();
-            Console.ReadLine();
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
         }
 
         public static void MainMenu()
