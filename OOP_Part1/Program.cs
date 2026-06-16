@@ -2,6 +2,101 @@
 {
     internal class Program
     {
+        // System Lists
+        static List<Room> rooms = new List<Room>();
+        static List<Guest> guests = new List<Guest>();
+
+        public static void AddNewRoom()
+        {
+            try
+            {
+                Console.Clear();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("================================================\r\n\nADD NEW ROOOM\r\n\n================================================");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter room number: ");
+                Console.ResetColor();
+
+                
+                if (!int.TryParse(Console.ReadLine(), out int roomNum) || roomNum <= 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid room number. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                string roomNumber = roomNum.ToString();
+
+                if (rooms.Any(r => r.roomNumber == roomNumber))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Room number alredy exists. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter room type (Single / Double / Suite): ");
+                Console.ResetColor();
+
+                RoomType roomType;
+                switch(Console.ReadLine()?.Trim().ToLower())
+                {
+                    case "single":
+                        roomType = RoomType.Single;
+                        break;
+                    case "double":
+                        roomType = RoomType.Double;
+                        break;
+                    case "suite":
+                        roomType = RoomType.Suite;
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n  Error: Invalid room type. Press Enter.");
+                        Console.ResetColor();
+                        Console.ReadLine();
+                        return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter price per night: ");
+                Console.ResetColor();
+
+                if (!double.TryParse(Console.ReadLine(), out double pricePerNight))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid price. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                // Create new Room object and add it to the room list
+                rooms.Add(new Room(roomNumber, roomType, pricePerNight));
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  Room {roomNumber} added successfully. Total rooms: {rooms.Count}");
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex) 
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+
         public static void MainMenu()
         {
             while (true)
@@ -28,9 +123,9 @@
                 switch (Console.ReadLine())
                 {
                     case "1":
-                        //Add New Room
+                        AddNewRoom();
                         break;
-
+                        
                     case "2":
                         // Register New Guest
                         break;
@@ -70,17 +165,13 @@
         
         static void Main(string[] args)
         {
-            // System Lists
-            List<Room> rooms = new List<Room>();
-            List<Guest> guests = new List<Guest>();
-
             // Pre-load 6 rooms
             rooms.Add(new Room("101", RoomType.Single, 22.1));
             rooms.Add(new Room("102", RoomType.Single, 23.5));
             rooms.Add(new Room("201", RoomType.Double, 30.8));
             rooms.Add(new Room("202", RoomType.Double, 36.7));
-            rooms.Add(new Room("301", RoomType.Suite,  40.5));
-            rooms.Add(new Room("302", RoomType.Suite,  45.99));
+            rooms.Add(new Room("301", RoomType.Suite, 40.5));
+            rooms.Add(new Room("302", RoomType.Suite, 45.99));
 
 
             MainMenu();
