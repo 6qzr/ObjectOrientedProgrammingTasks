@@ -288,6 +288,15 @@
                                              .OrderBy(r => r.pricePerNight)
                                              .ToList();
             
+            if (availableRooms.Count == 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("\n  No rooms found for the selected criteria. Press Enter.");
+                Console.ResetColor();
+                Console.ReadLine();
+                return;
+            }
+            
             DisplayRooms(availableRooms);
             
             Console.ForegroundColor = ConsoleColor.Green;
@@ -327,6 +336,15 @@
                 }
 
                 List<Room> filteredRooms = rooms.Where(r => r.roomType == roomType).ToList();
+
+                if (filteredRooms.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("\n  No rooms found for the selected criteria. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
 
                 DisplayRooms(filteredRooms);
 
@@ -369,6 +387,15 @@
                 List<Room> filteredRooms = rooms.Where(r => r.pricePerNight <= maxPrice)
                                                 .OrderBy(r => r.pricePerNight)
                                                 .ToList();
+
+                if (filteredRooms.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine("\n  No rooms found for the selected criteria. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
 
                 DisplayRooms(filteredRooms);
 
