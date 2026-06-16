@@ -326,12 +326,12 @@
                         return;
                 }
 
-                List<Room> FilteredRooms = rooms.Where(r => r.roomType == roomType).ToList();
+                List<Room> filteredRooms = rooms.Where(r => r.roomType == roomType).ToList();
 
-                DisplayRooms(FilteredRooms);
+                DisplayRooms(filteredRooms);
 
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"\nTotal rooms: {FilteredRooms.Count}");
+                Console.WriteLine($"\nTotal rooms: {filteredRooms.Count}");
                 Console.ResetColor();
                 Console.ReadLine();
             }
@@ -347,6 +347,48 @@
             }
         }
 
+        public static void FilterByMaxPrice()
+        {
+            try
+            {
+                DisplayHeader("Filter By Max Price");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter max price: ");
+                Console.ResetColor();
+
+                if (!double.TryParse(Console.ReadLine(), out double maxPrice))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Error: Invalid max price. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                List<Room> filteredRooms = rooms.Where(r => r.pricePerNight <= maxPrice)
+                                                .OrderBy(r => r.pricePerNight)
+                                                .ToList();
+
+                DisplayRooms(filteredRooms);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nTotal rooms: {filteredRooms.Count}");
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+        
         public static void SearchFilterRooms()
         {
             
@@ -372,6 +414,10 @@
 
                         case "2":
                             FilterByRoomType();
+                            break;
+
+                        case "3":
+                            FilterByMaxPrice();
                             break;
 
                         case "0":
