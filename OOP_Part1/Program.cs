@@ -494,6 +494,53 @@
                 Console.ReadLine();
             }
         }
+        
+        public static void GuestBookingStatistics()
+        {
+            DisplayHeader("Guest & Booking Statistics");
+
+            int totalRegisteredGuests = guests.Count;
+            int guestsWithRooms = guests.Where(g => g.roomNumber != "Not Assigned")
+                                        .Count();
+
+            int totalRooms = rooms.Count;
+            int bookedRooms = rooms.Count(r => !r.isAvailable);
+
+            double averageNights = guests.Any(g => g.roomNumber != "Not Assigned")
+                ? guests.Where(g => g.roomNumber != "Not Assigned")
+                        .Average(g => g.totalNights)
+                : 0;
+
+            List<Guest> topGuests = guests.OrderByDescending(g => g.CalculateTotalCost(rooms))
+                                          .Take(3)
+                                          .ToList();
+
+            var summaryBookedGuests = guests.Where(g => g.roomNumber != "Not Assigned")
+                                            .Select(g => $"{g.guestName} — Room {g.roomNumber} — {g.totalNights} nights — OMR {g.CalculateTotalCost(rooms):F2}")
+                                            .ToList();
+
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine($"\n  Total Registered Guests  : {totalRegisteredGuests}");
+            Console.WriteLine($"  Guests With Active Rooms : {guestsWithRooms}");
+            Console.WriteLine($"  Total Rooms              : {totalRooms}");
+            Console.WriteLine($"  Booked Rooms             : {bookedRooms}");
+            Console.WriteLine($"  Average Nights (Booked)  : {averageNights:F2}");
+
+            Console.WriteLine("\n  --- Top 3 Highest Spending Guests ---");
+            if (!topGuests.Any())
+                Console.WriteLine("  No active bookings recorded.");
+            else
+                topGuests.ForEach(g => Console.WriteLine($"  {g.guestName} — Room {g.roomNumber} — OMR {g.CalculateTotalCost(rooms):F2}"));
+
+            Console.WriteLine("\n  --- Booked Guests Summary ---");
+            if (!summaryBookedGuests.Any())
+                Console.WriteLine("  No active bookings recorded.");
+            else
+                summaryBookedGuests.ForEach(s => Console.WriteLine($"  {s}"));
+
+            Console.ResetColor();
+            Console.ReadLine();
+        }
 
         public static void CheckOutGuest()
         {
@@ -610,7 +657,7 @@
                         break;
 
                     case "5":
-                        //GuestBookingStatistics();
+                        GuestBookingStatistics();
                         break;
 
                     case "6":
