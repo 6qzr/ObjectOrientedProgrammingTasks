@@ -70,6 +70,19 @@
         
         static void Main(string[] args)
         {
+            // System Lists
+            List<Room> rooms = new List<Room>();
+            List<Guest> guests = new List<Guest>();
+
+            // Pre-load 6 rooms
+            rooms.Add(new Room("101", RoomType.Single, 22.1));
+            rooms.Add(new Room("102", RoomType.Single, 23.5));
+            rooms.Add(new Room("201", RoomType.Double, 30.8));
+            rooms.Add(new Room("202", RoomType.Double, 36.7));
+            rooms.Add(new Room("301", RoomType.Suite,  40.5));
+            rooms.Add(new Room("302", RoomType.Suite,  45.99));
+
+
             MainMenu();
         }
     }
