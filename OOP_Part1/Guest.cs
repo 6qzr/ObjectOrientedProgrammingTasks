@@ -23,7 +23,7 @@ namespace OOP_Part1
 
         public void DisplayGuest()
         {
-            Console.WriteLine($"Guest ID: {guestId}\n" +
+            Console.WriteLine($"\nGuest ID: {guestId}\n" +
                 $"Guest Name: {guestName}\n" +
                 $"Room Number: {roomNumber}\n" +
                 $"Check-In Date: {checkInDate}\n" +

@@ -21,7 +21,7 @@
         public static int GetRoomNumber()
         {
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.Write("\nEnter room number: ");
+            Console.Write("\nEnter room number (0 to back): ");
             Console.ResetColor();
 
 
@@ -180,7 +180,6 @@
                 guests.Add(newGuest);
 
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine();
                 newGuest.DisplayGuest();
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -199,7 +198,78 @@
                 Console.ReadLine();
             }
         }
-        
+
+        public static void BookRoom()
+        {
+            try
+            {
+                DisplayHeader("BOOK A ROOM FOR A GUEST");
+
+                string? guestId = GetGuestID();
+                if (guestId == null) return;
+
+                string roomNumber = GetRoomNumber().ToString();
+                if (roomNumber == "0") return;
+
+                Room?  room  = rooms.FirstOrDefault(r => r.roomNumber == roomNumber);
+                if (room == null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  No room with such number. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Guest? guest = guests.FirstOrDefault(g => g.guestId == guestId);
+                if (guest == null)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  No guest with such ID. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                if (!room.isAvailable)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Room is already booked. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                //  Assign the room number to the guest's roomNumber field
+                guest.roomNumber = roomNumber;
+
+                // Set the room's isAvailable to false
+                room.isAvailable = false;
+
+                // Total Cost
+                double totalCost = guest.CalculateTotalCost(rooms);
+
+                Console.ForegroundColor = ConsoleColor.White;
+                guest.DisplayGuest();
+                room.DisplayRoom();
+                Console.ResetColor();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  Total Cost: {totalCost:F2} OMR");
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+
         public static void MainMenu()
         {
             while (true)
@@ -234,7 +304,7 @@
                         break;
 
                     case "3":
-                        // BookRoom();
+                        BookRoom();
                         break;
 
                     case "4":
