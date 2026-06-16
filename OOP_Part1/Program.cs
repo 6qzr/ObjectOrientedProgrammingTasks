@@ -384,7 +384,7 @@
                     return;
                 }
 
-                List<Room> filteredRooms = rooms.Where(r => r.pricePerNight <= maxPrice)
+                List<Room> filteredRooms = rooms.Where(r => r.pricePerNight <= maxPrice && r.isAvailable)
                                                 .OrderBy(r => r.pricePerNight)
                                                 .ToList();
 
