@@ -295,7 +295,58 @@
             Console.ResetColor();
             Console.ReadLine();
         }
-      
+
+        public static void FilterByRoomType()
+        {
+            try
+            {
+                DisplayHeader("Filter By Room Type");
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\nEnter room type (Single / Double / Suite): ");
+                Console.ResetColor();
+
+                RoomType roomType;
+                switch (Console.ReadLine()?.Trim().ToLower())
+                {
+                    case "single":
+                        roomType = RoomType.Single;
+                        break;
+                    case "double":
+                        roomType = RoomType.Double;
+                        break;
+                    case "suite":
+                        roomType = RoomType.Suite;
+                        break;
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\n  Error: Invalid room type. Press Enter.");
+                        Console.ResetColor();
+                        Console.ReadLine();
+                        return;
+                }
+
+                List<Room> FilteredRooms = rooms.Where(r => r.roomType == roomType).ToList();
+
+                DisplayRooms(FilteredRooms);
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\nTotal rooms: {FilteredRooms.Count}");
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+
         public static void SearchFilterRooms()
         {
             
@@ -320,7 +371,7 @@
                             break;
 
                         case "2":
-                            //FilterByRoomType();
+                            FilterByRoomType();
                             break;
 
                         case "0":
