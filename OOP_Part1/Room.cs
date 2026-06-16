@@ -7,10 +7,10 @@ namespace OOP_Part1
     public enum RoomType { Single, Double, Suite }
     internal class Room
     {
-        public string roomNumber { get; private set; }
+        public string   roomNumber { get; private set; }
         public RoomType roomType { get; private set; }
-        public double pricePerNight { get; private set; }
-        public bool   isAvailable { get; set; }
+        public double   pricePerNight { get; private set; }
+        public bool     isAvailable { get; set; }
 
         public Room(string roomNumber, RoomType roomType, double pricePerNight)
         {
