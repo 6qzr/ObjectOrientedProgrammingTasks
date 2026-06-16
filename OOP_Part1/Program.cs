@@ -628,6 +628,69 @@
             }
         }
 
+        public static void RemoveUnavailableRooms()
+        {
+            try
+            {
+                DisplayHeader("Check Out A Guest");
+
+                List<Room> removableRooms = rooms.Where(r => !r.isAvailable &&
+                                                        !guests.Any(g => g.roomNumber == r.roomNumber))
+                                                 .OrderBy(r => r.roomNumber)
+                                                 .ToList();
+
+                if (removableRooms.Count == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  All unavailable rooms are currently occupied. No rooms can be decommissioned.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.WriteLine("\n  --- Removable Rooms ---");
+                removableRooms.ForEach(r => Console.WriteLine($"  Room {r.roomNumber} | {r.roomType} | {r.pricePerNight:F2} OMR"));
+                Console.WriteLine($"\n  Total removable rooms: {removableRooms.Count}");
+                Console.ResetColor();
+
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.Write("\n  Confirm removal? (Y/N): ");
+                Console.ResetColor();
+
+                if (Console.ReadLine()?.Trim().ToUpper() != "Y")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n  Removal cancelled. Press Enter.");
+                    Console.ResetColor();
+                    Console.ReadLine();
+                    return;
+                }
+
+                rooms.RemoveAll(r => !r.isAvailable &&
+                                !guests.Any(g => g.roomNumber == r.roomNumber));
+
+                var remaining = rooms.Select(r => $"  Room {r.roomNumber} | {r.roomType}").ToList();
+
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"\n  Rooms removed successfully. Total rooms remaining: {rooms.Count}");
+                Console.WriteLine("\n  --- Remaining Rooms ---");
+                remaining.ForEach(Console.WriteLine);
+                Console.ResetColor();
+                Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\nAn unexpected error occurred:");
+                Console.WriteLine(ex.Message);
+                Console.ResetColor();
+
+                Console.WriteLine("\nPress Enter to continue...");
+                Console.ReadLine();
+            }
+        }
+
         public static void MainMenu()
         {
             while (true)
@@ -678,7 +741,7 @@
                         break;
 
                     case "7":
-                        // Remove Unavailable Rooms
+                        RemoveUnavailableRooms();
                         break;
                    
                     case "0":
