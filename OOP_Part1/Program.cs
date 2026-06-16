@@ -18,27 +18,42 @@
             Console.ResetColor();
         }
 
+        public static int GetRoomNumber()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("\nEnter room number: ");
+            Console.ResetColor();
+
+
+            if (!int.TryParse(Console.ReadLine(), out int roomNum) || roomNum <= 0)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("\n  Error: Invalid room number. Press Enter.");
+                Console.ResetColor();
+                Console.ReadLine();
+                return 0;
+            }
+
+            return roomNum;
+        }
+
+        public static string? GetGuestID()
+        {
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.Write("\nEnter guest ID: ");
+            Console.ResetColor();
+
+            return Console.ReadLine()?.Trim().ToUpper();
+        }
+
         public static void AddNewRoom()
         {
             try
             {
                 DisplayHeader("ADD NEW ROOM");
-
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.Write("\nEnter room number: ");
-                Console.ResetColor();
-
                 
-                if (!int.TryParse(Console.ReadLine(), out int roomNum) || roomNum <= 0)
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("\n  Error: Invalid room number. Press Enter.");
-                    Console.ResetColor();
-                    Console.ReadLine();
-                    return;
-                }
-
-                string roomNumber = roomNum.ToString();
+                string roomNumber = GetRoomNumber().ToString();
+                if (roomNumber == "0") return;
 
                 if (rooms.Any(r => r.roomNumber == roomNumber))
                 {
@@ -184,7 +199,7 @@
                 Console.ReadLine();
             }
         }
-
+        
         public static void MainMenu()
         {
             while (true)
@@ -219,7 +234,7 @@
                         break;
 
                     case "3":
-                        // Book a Room for a Guest
+                        // BookRoom();
                         break;
 
                     case "4":
