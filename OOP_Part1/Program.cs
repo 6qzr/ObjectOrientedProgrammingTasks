@@ -6,14 +6,19 @@
         static List<Room> rooms = new List<Room>();
         static List<Guest> guests = new List<Guest>();
 
+        public static void DisplayHeader(string header)
+        {
+            Console.Clear();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"================================================\r\n\n{header.ToUpper()}\r\n\n================================================");
+            Console.ResetColor();
+        }
+
         public static void AddNewRoom()
         {
             try
             {
-                Console.Clear();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("================================================\r\n\nADD NEW ROOOM\r\n\n================================================");
-                Console.ResetColor();
+                DisplayHeader("ADD NEW ROOM");
 
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.Write("\nEnter room number: ");
