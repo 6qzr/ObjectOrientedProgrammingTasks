@@ -21,7 +21,7 @@ namespace OOP_Part1
             this.totalNights = totalNights;
         }
 
-        public void displayGuest()
+        public void DisplayGuest()
         {
             Console.WriteLine($"Guest ID: {guestId}\n" +
                 $"Guest Name: {guestName}\n" +
@@ -30,7 +30,7 @@ namespace OOP_Part1
                 $"Total Nights: {totalNights}");
         }
 
-        public double calculateTotalCost(List<Room> rooms)
+        public double CalculateTotalCost(List<Room> rooms)
         {
             var room = rooms.FirstOrDefault(r => r.roomNumber == this.roomNumber);
             return room == null ? 0 : (room.pricePerNight * totalNights);

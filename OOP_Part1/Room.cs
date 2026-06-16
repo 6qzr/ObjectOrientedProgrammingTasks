@@ -20,7 +20,7 @@ namespace OOP_Part1
             this.isAvailable = true; // always true on creation;
         }
 
-        public void displayRoom() 
+        public void DisplayRoom() 
         {
             Console.WriteLine($"\nRoom: {roomNumber}  |   Type: {roomType}    |   Price: {pricePerNight:F2} OMR   |   Available: {isAvailable}");
         }
